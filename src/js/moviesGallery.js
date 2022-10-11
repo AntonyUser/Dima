@@ -3,8 +3,12 @@ import { createMovieCards } from './moviesMarkup';
 import { modalBasicLightbox } from './modalBasicLightbox';
 import Pagination from 'tui-pagination';
 import 'tui-pagination/dist/tui-pagination.css';
+import { onAddToLocalStorage } from './add_to_watch';
+import { libraryMarkup } from './add_to_watch';
 
 const moviesContainer = document.querySelector('.movies');
+// const myLibraryLink = document.querySelector('.header-nav__link');
+// const myLibraryContainer = document.querySelector('.my-libraryMarkup');
 
 async function trendingMovies() {
   try {
@@ -31,6 +35,7 @@ async function trendingMovies() {
 trendingMovies();
 
 moviesContainer.addEventListener('click', onMovieCardClick);
+// myLibraryContainer.addEventListener('click', onMovieCardClick);
 
 async function onMovieCardClick(e) {
   const id = e.target.closest('li').dataset.id;
@@ -39,7 +44,24 @@ async function onMovieCardClick(e) {
   }
   try {
     const film = await fetchMovieById(id);
+    localStorage.setItem('current', JSON.stringify(film));
     modalBasicLightbox(film);
+    onAddToLocalStorage();
+    const watchedBtn = document.querySelector('.watched');
+    const watchedData = JSON.parse(localStorage.getItem('watched'));
+    const watchedDeleteBtn = document.querySelector('.delete-watched');
+    const queueBtn = document.querySelector('.queue');
+    const queueDeleteBtn = document.querySelector('.delete-queue');
+    const queueData = JSON.parse(localStorage.getItem('queue'));
+    const idNumber = Number(id);
+    if (watchedData.includes(idNumber)) {
+      watchedBtn.classList.add('visually-hidden');
+      watchedDeleteBtn.classList.remove('visually-hidden');
+    }
+    if (queueData.includes(idNumber)) {
+      queueBtn.classList.add('visually-hidden');
+      queueDeleteBtn.classList.remove('visually-hidden');
+    }
   } catch (error) {
     console.log(error.message);
   }

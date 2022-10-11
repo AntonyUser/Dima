@@ -56,8 +56,10 @@ function modalBasicLightbox({
         <p class="about__text">${overview}</p>
       </div>
       <div class="button__wrapper">
-        <button type="button" class="movie__button" data-id=${id}>Add to watched</button>
-        <button type="button" class="movie__button" data-id=${id}>Add to queue</button>
+        <button type="button" class="movie__button watched" data-id=${id}>Add to watched</button>
+        <button type="button" class="movie__button delete-watched visually-hidden" data-id=${id}>Delete from watched</button>
+        <button type="button" class="movie__button queue" data-id=${id}>Add to queue</button>
+        <button type="button" class="movie__button delete-queue visually-hidden" data-id=${id}>Delete from queue</button>
       </div>
       </div>
       </div>
@@ -76,6 +78,7 @@ function modalBasicLightbox({
       },
       onClose: instance => {
         body.style.overflow = 'auto';
+        localStorage.removeItem('current');
       },
     }
   );
